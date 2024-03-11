@@ -18,6 +18,7 @@ public class EnemyController : MonoBehaviour
         private Animator anim;
         public float moveSpeed = 3f;
         public Transform player;
+        public bool hitP = false;
 
         private void Awake()
         {
@@ -35,6 +36,11 @@ public class EnemyController : MonoBehaviour
                 {
                     cooldownTimer = 0;
                     anim.SetTrigger("meleeAttack");
+                    if(hitP == true)
+                {
+                    DamagePlayer();
+                }
+                    
                 }
             }
                 
@@ -62,5 +68,18 @@ public class EnemyController : MonoBehaviour
             if (PlayerInSight())
                 BlueGemManager.Instance.LoseGem(1);
         }
+        void OnCollisionEnter2D(Collision2D collision)
+      {
+        // Check if the collision involves the specific GameObject you're interested in
+          if (collision.gameObject.CompareTag("Player"))
+         {
+            hitP = true;
+            // Do something when collision occurs
+          }
+        else
+        {
+            hitP = false;
+        }
     }
+}
 

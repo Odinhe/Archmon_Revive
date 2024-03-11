@@ -8,7 +8,7 @@ public class PlayerWalking : MonoBehaviour
     private int remainingJumps;
     private float attackCooldownTimer;
     public int maxJumps = 2;
-    public float attackCooldown = 0.5f;
+    public float attackCooldown = 1f;
     public Transform attackPoint;
     public LayerMask enemyLayers;
 
