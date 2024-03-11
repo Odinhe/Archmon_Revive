@@ -3,30 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour
-{
-    public class MeleeEnemy : MonoBehaviour
-    {
-        [Header("Attack Parameters")]
+{  
         [SerializeField] private float attackCooldown;
         [SerializeField] private float range;
         [SerializeField] private int damage;
 
-        [Header("Collider Parameters")]
+        
         [SerializeField] private float colliderDistance;
         [SerializeField] private BoxCollider2D boxCollider;
 
-        [Header("Player Layer")]
+        
         [SerializeField] private LayerMask playerLayer;
         private float cooldownTimer = Mathf.Infinity;
-
-        //References
         private Animator anim;
-        private EnemyPotral enemyPatrol;
+        public float moveSpeed = 3f;
+        public Transform player;
 
         private void Awake()
         {
             anim = GetComponent<Animator>();
-            enemyPatrol = GetComponentInParent<EnemyPotral>();
         }
 
         private void Update()
@@ -42,25 +37,24 @@ public class EnemyController : MonoBehaviour
                     anim.SetTrigger("meleeAttack");
                 }
             }
-
-            if (enemyPatrol != null)
-                enemyPatrol.enabled = !PlayerInSight();
+                
         }
 
         private bool PlayerInSight()
         {
-            RaycastHit2D hit =
-                Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-                new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),
-                0, Vector2.left, 0, playerLayer);
-
+            RaycastHit2D hit = Physics2D.BoxCast(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z),0, Vector2.left, 0, playerLayer);
+            if(hit.collider != null)
+            {
+                Vector3 direction = player.position - transform.position;
+                direction.Normalize();
+                transform.position += direction * moveSpeed * Time.deltaTime;
+            }
             return hit.collider != null;
         }
         private void OnDrawGizmos()
         {
             Gizmos.color = Color.red;
-            Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,
-                new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
+            Gizmos.DrawWireCube(boxCollider.bounds.center + transform.right * range * transform.localScale.x * colliderDistance,new Vector3(boxCollider.bounds.size.x * range, boxCollider.bounds.size.y, boxCollider.bounds.size.z));
         }
 
         private void DamagePlayer()
@@ -69,4 +63,4 @@ public class EnemyController : MonoBehaviour
                 BlueGemManager.Instance.LoseGem(1);
         }
     }
-}
+

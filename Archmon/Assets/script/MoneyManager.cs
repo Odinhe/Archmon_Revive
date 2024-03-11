@@ -6,7 +6,7 @@ public class MoneyManager : MonoBehaviour
 {
     //create the instance of the singleton that we are using
     public static MoneyManager instance;
-    private int money;
+    private int money = 100;
 
     public int Money
     {
