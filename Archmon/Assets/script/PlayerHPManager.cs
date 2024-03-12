@@ -6,7 +6,7 @@ public class PlayerHPManager : MonoBehaviour
 {
     //create the instance of the singleton that we are using
     public static PlayerHPManager instance;
-    private int hp;
+    private int hp = 10;
 
     public int HP
     {
@@ -26,17 +26,17 @@ public class PlayerHPManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-    //add money when run the program
+    //add hp when run the program
     public void AddHp(int amount)
     {
         hp += amount;
         Debug.Log("HP added: " + amount + ". Total hp: " + hp);
     }
-    //reduce money when run the program
+    //reduce hp when run the program
     public void ReduceHp(int amount)
     {
         hp -= amount;
-        Debug.Log("Money subtracted: " + amount + ". Total money: " + hp);
+        Debug.Log("Hp subtracted: " + amount + ". Total hp: " + hp);
     }
 
     public static PlayerHPManager Instance

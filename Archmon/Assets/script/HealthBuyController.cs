@@ -26,13 +26,13 @@ public class HealthBuyController : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-    //add money when run the program
+    //add health when run the program
     public void AddHealth(int amount)
     {
         healthnum += amount;
         Debug.Log("Money added: " + amount + ". Total money: " + healthnum);
     }
-    //reduce money when run the program
+    //reduce health when run the program
     public void ReduceHealth()
     {
         healthnum = 0;
@@ -50,7 +50,7 @@ public class HealthBuyController : MonoBehaviour
                 {
                     GameObject singletonObject = new GameObject();
                     instance = singletonObject.AddComponent<HealthBuyController>();
-                    singletonObject.name = typeof(MoneyManager).ToString() + " (Singleton)";
+                    singletonObject.name = typeof(HealthBuyController).ToString() + " (Singleton)";
                 }
             }
             return instance;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,29 +18,37 @@ public class PotController : MonoBehaviour
 
     public int RedGemNum;
     public int BlueGemNum;
+    public int health;
+    public int attack;
+    public int money;
 
     //set the list of the sprite so later The sprite can change
     public List<Sprite> spr;
 
-    //set different text to change
-    [SerializeField] private Text Blue;
-    [SerializeField] private Text Red;
-    [SerializeField] private Text Total;
-    [SerializeField] public Text Warning;
-
+    public TextMeshProUGUI Red;
+    public TextMeshProUGUI Blue;
+    public TextMeshProUGUI Total;
+    public TextMeshProUGUI Warning;
+    public TextMeshProUGUI Health;
+    public TextMeshProUGUI Attack;
+    public TextMeshProUGUI Money;
     //set up the game object so later can genrate when ger result
     public GameObject ArmorPotion;
     public GameObject FirePotion;
     public GameObject HealthPotion;
     public GameObject BlueGem;
     public GameObject RedGem;
+
+
     void Start()
     {
         RedGemNum = GemManager.Instance.RedGem;
-        BlueGemNum = BlueGemManager.Instance.BlueGem;  
+        BlueGemNum = BlueGemManager.Instance.BlueGem;
+        health = PlayerHPManager.Instance.HP;
         //get the collider and rigidbody before the game start
         rb = GetComponent<Rigidbody2D>();
         potCollider = GetComponent<Collider2D>();
+        //check the gemManagers
         if (GemManager.Instance == null)
         {
             Debug.LogError("GemManager is null");
@@ -50,11 +59,25 @@ public class PotController : MonoBehaviour
             Debug.LogError("BlueGemManager is null");
         }
 
+
     }
 
     // Update is called once per frame
     void Update()
     {
+        //set up the text
+        Total.text = "Total Gem in Pot: " + numBot;
+        Red.text = "Red Gem: " + RedNum;
+        Blue.text = "Blue Gem: " + BlueNum;
+        Attack.text = "Your Attack Point: " + attack;
+        Health.text = "Your HP: " + health;
+        Money.text = "Your Money: " + money;
+        Warning.text = "Pot is not full!";
+        health = PlayerHPManager.Instance.HP;
+        attack = PlayerAttackManager.Instance.Attack;
+        money = MoneyManager.Instance.Money;
+
+        //genrate the gem before the game start based on how many gems player hold
         if (BlueGemNum > 0)
         {
             Instantiate(BlueGem, new Vector2(6, 3), Quaternion.identity);
@@ -81,30 +104,29 @@ public class PotController : MonoBehaviour
             Potion = "HealthPotion";
         }
 
-        //if there are five or more elements in the pot, player can start making the gem by right click
+        //if there are one elements in the pot, player can start making the gem by right click
         if (numBot >= 1 && Input.GetMouseButtonDown(0))
         {
             Debug.Log("good");
-            Total.text = "Total: " + numBot;
-            Red.text = "Red: " + RedNum;
-            Blue.text = "Blue: " + BlueNum;
-            Warning.text = "Pot is not full!";
             RedNum = 0;
             BlueNum = 0;
             numBot = 0;
 
             //set the gem span position, which is disgned
-            Vector3 spawnPosition = new Vector3(-0.07f, -2.48f, -1f);
+            Vector3 spawnPosition = new Vector3(-0.07f, -2.48f, -3f);
             //besed on the different result of the color combination, the gem that will be genrated will be different 
             switch (Potion)
             {
                 case "ArmorPotion":
+                    MoneyManager.Instance.AddMoney(50);
                     Instantiate(ArmorPotion, spawnPosition, Quaternion.identity);
                     break;
                 case "FirePotion":
+                    PlayerAttackManager.Instance.AddAttack(1);
                     Instantiate(FirePotion, spawnPosition, Quaternion.identity);
                     break;
                 case "HealthPotion":
+                    PlayerHPManager.Instance.AddHp(2);
                     Instantiate(HealthPotion, spawnPosition, Quaternion.identity);
                     break;
             }

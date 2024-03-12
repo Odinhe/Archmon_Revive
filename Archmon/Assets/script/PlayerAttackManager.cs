@@ -6,9 +6,9 @@ public class PlayerAttackManager : MonoBehaviour
 {
     //create the instance of the singleton that we are using
     public static PlayerAttackManager instance;
-    private int attack;
+    private int attack = 1;
 
-    public int Money
+    public int Attack
     {
         get { return attack; }
         set { attack = value; }
@@ -26,13 +26,13 @@ public class PlayerAttackManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
     }
-    //add money when run the program
+    //add attack when run the program
     public void AddAttack(int amount)
     {
         attack += amount;
         Debug.Log("Money added: " + amount + ". Total money: " + attack);
     }
-    //reduce money when run the program
+    //reduce attack when run the program
     public void ReduceAttack(int amount)
     {
         attack -= amount;
